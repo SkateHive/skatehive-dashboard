@@ -35,7 +35,7 @@ Local dashboard for monitoring and managing SkateHive user accounts. Connects to
 ## Setup
 
 ```bash
-git clone https://github.com/r4topunk/skatehive-dashboard.git
+git clone https://github.com/SkateHive/skatehive-dashboard.git
 cd skatehive-dashboard
 pnpm install
 ```
