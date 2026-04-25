@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import type { User, Identity, HiveKey, Sponsorship } from "@/lib/types"
 import type { AccountTier } from "@/lib/tiers"
@@ -15,6 +16,27 @@ import { SortableHead, type SortDirection, useSortToggle } from "@/components/ui
 import { Shield, Wallet, Mail, Key, Sparkles, Search, ChevronRight } from "lucide-react"
 
 const tierIcons: Record<AccountTier, typeof Shield> = { full: Shield, evm: Wallet, lite: Mail }
+
+function AvatarCell({ avatarUrl, name, bg, color }: { avatarUrl: string | null; name: string; bg: string; color: string }) {
+  const [failed, setFailed] = useState(false)
+  if (avatarUrl && !failed) {
+    return (
+      <Image
+        src={avatarUrl}
+        alt={name}
+        width={32}
+        height={32}
+        className="h-8 w-8 shrink-0 rounded-full object-cover"
+        onError={() => setFailed(true)}
+      />
+    )
+  }
+  return (
+    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold uppercase ${bg} ${color}`}>
+      {name.slice(0, 2)}
+    </div>
+  )
+}
 
 function truncateAddr(addr: string) {
   return addr.length <= 14 ? addr : `${addr.slice(0, 6)}...${addr.slice(-4)}`
@@ -54,7 +76,7 @@ type Props = {
 
 const tierOrder: AccountTier[] = ["full", "evm", "lite"]
 
-export function UsersTable({ rows, tierCounts, sponsoredCount }: Props) {
+export function UsersTable({ rows, tierCounts }: Props) {
   const [search, setSearch] = useState("")
   const [tierFilter, setTierFilter] = useState<AccountTier | "all" | "candidates">("all")
   const [sortBy, setSortBy] = useState<"created" | "activity" | "engagement">("created")
@@ -231,9 +253,17 @@ export function UsersTable({ rows, tierCounts, sponsoredCount }: Props) {
                   <TableRow key={row.user.id} className="table-row-hover group">
                     <TableCell className="pl-6">
                       <Link href={`/users/${row.user.id}`} className="flex items-center gap-3">
-                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold uppercase ${config.bg} ${config.color}`}>
-                          {(row.user.display_name ?? row.user.handle ?? "?").slice(0, 2)}
-                        </div>
+                        <AvatarCell
+                          avatarUrl={
+                            row.user.avatar_url ??
+                            (row.identities.find((i) => i.type === "hive" && i.handle)?.handle
+                              ? `https://images.hive.blog/u/${row.identities.find((i) => i.type === "hive" && i.handle)!.handle}/avatar`
+                              : null)
+                          }
+                          name={row.user.display_name ?? row.user.handle ?? "?"}
+                          bg={config.bg}
+                          color={config.color}
+                        />
                         <div className="min-w-0">
                           <div className="truncate text-sm font-medium">{row.user.display_name ?? "—"}</div>
                           <div className="truncate text-[11px] text-muted-foreground font-mono-data">

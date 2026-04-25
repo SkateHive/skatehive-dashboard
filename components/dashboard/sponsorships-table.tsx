@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import type { Sponsorship, User } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table, TableBody, TableCell, TableHeader, TableRow,
 } from "@/components/ui/table"
 import { SortableHead, type SortDirection, useSortToggle } from "@/components/ui/sortable-head"
 import { ExternalLink, CheckCircle, Clock, AlertTriangle, Loader2 } from "lucide-react"

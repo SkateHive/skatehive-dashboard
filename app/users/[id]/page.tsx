@@ -14,6 +14,7 @@ import {
   Clock, Monitor, Smartphone, Globe, CheckCircle, XCircle,
   FileText, ThumbsUp, Sparkles, User as UserIcon,
 } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -38,9 +39,6 @@ function timeAgo(dateStr: string) {
   return `${Math.floor(days / 30)}mo ago`
 }
 
-function truncateAddr(addr: string) {
-  return addr.length <= 18 ? addr : `${addr.slice(0, 10)}...${addr.slice(-6)}`
-}
 
 function parseUserAgent(ua: string | null): { icon: typeof Monitor; label: string } {
   if (!ua) return { icon: Globe, label: "Unknown" }
@@ -119,9 +117,17 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold uppercase ${config.bg} ${config.color}`}>
-                  {(user.display_name ?? user.handle ?? "?").slice(0, 2)}
-                </div>
+                {(() => {
+                  const hiveHandle = identities.find((i) => i.type === "hive" && i.handle)?.handle
+                  const src = user.avatar_url ?? (hiveHandle ? `https://images.hive.blog/u/${hiveHandle}/avatar` : null)
+                  return src ? (
+                    <Image src={src} alt={user.display_name ?? user.handle ?? "avatar"} width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
+                  ) : (
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold uppercase ${config.bg} ${config.color}`}>
+                      {(user.display_name ?? user.handle ?? "?").slice(0, 2)}
+                    </div>
+                  )
+                })()}
                 <div>
                   <div className="font-medium">{user.display_name ?? "—"}</div>
                   <div className="text-sm text-muted-foreground font-mono-data">
@@ -310,7 +316,6 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
                 </TableHeader>
                 <TableBody>
                   {sessions.slice(0, 15).map((session) => {
-                    const isActive = !session.revoked_at && new Date(session.expires_at) > new Date()
                     const isExpired = new Date(session.expires_at) <= new Date()
                     const ua = parseUserAgent(session.user_agent)
                     const DeviceIcon = ua.icon
