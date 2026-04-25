@@ -232,15 +232,15 @@ export function UsersTable({ rows, tierCounts }: Props) {
           <Table>
             <TableHeader>
               <TableRow>
-                <SortableHead className="pl-6 w-[220px]" active={colSortKey === "user"} direction={colSortDir} onClick={() => { toggleCol("user"); setSortBy("created") }}>User</SortableHead>
-                <SortableHead className="w-[65px]" active={colSortKey === "tier"} direction={colSortDir} onClick={() => { toggleCol("tier"); setSortBy("created") }}>Tier</SortableHead>
+                <SortableHead className="pl-6 w-55" active={colSortKey === "user"} direction={colSortDir} onClick={() => { toggleCol("user"); setSortBy("created") }}>User</SortableHead>
+                <SortableHead className="w-16.25" active={colSortKey === "tier"} direction={colSortDir} onClick={() => { toggleCol("tier"); setSortBy("created") }}>Tier</SortableHead>
                 <SortableHead active={colSortKey === "email"} direction={colSortDir} onClick={() => { toggleCol("email"); setSortBy("created") }}>Email</SortableHead>
                 <TableHead>Identities</TableHead>
-                <SortableHead className="text-center w-[80px]" active={colSortKey === "engagement"} direction={colSortDir} onClick={() => { toggleCol("engagement"); setSortBy("created") }}>Engagement</SortableHead>
-                <SortableHead className="w-[80px]" active={colSortKey === "lastActive"} direction={colSortDir} onClick={() => { toggleCol("lastActive"); setSortBy("created") }}>Last Active</SortableHead>
-                <TableHead className="w-[90px]">Sponsored</TableHead>
-                <SortableHead className="w-[60px]" active={colSortKey === "joined"} direction={colSortDir} onClick={() => { toggleCol("joined"); setSortBy("created") }}>Joined</SortableHead>
-                <TableHead className="pr-6 w-[30px]"></TableHead>
+                <SortableHead className="text-center w-20" active={colSortKey === "engagement"} direction={colSortDir} onClick={() => { toggleCol("engagement"); setSortBy("created") }}>Engagement</SortableHead>
+                <SortableHead className="w-20" active={colSortKey === "lastActive"} direction={colSortDir} onClick={() => { toggleCol("lastActive"); setSortBy("created") }}>Last Active</SortableHead>
+                <TableHead className="w-22.5">Sponsored</TableHead>
+                <SortableHead className="w-15" active={colSortKey === "joined"} direction={colSortDir} onClick={() => { toggleCol("joined"); setSortBy("created") }}>Joined</SortableHead>
+                <TableHead className="pr-6 w-7.5"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
